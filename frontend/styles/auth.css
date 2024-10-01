@@ -1,0 +1,22 @@
+.required-input:after { 
+  content:"*";
+  color:red;
+}
+
+#auth {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#auth-pills {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+#auth-forms {
+  display: flex;
+  justify-content: center;
+}

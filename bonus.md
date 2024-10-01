@@ -1,0 +1,5 @@
+- Consistent header design throughout website (UI/UX)
+- tab design for login/signup determined by doing some user testing, this design was preferred pver an initial login page with "Don't have an account? _Sign up_" (UI/UX)
+- Shows which comment you are replying to in the "Comment Reply" popup modal
+- Formatted dates into dd/mm/yyyy
+- toggle threads button that hides the thread list (ideal for smaller screens)

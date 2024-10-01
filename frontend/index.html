@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>QandA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap and Jquery -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <!-- Icon library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- ./styles files -->
+  <link rel="stylesheet" type="text/css" media="screen" href="styles/global.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="styles/auth.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="styles/threads.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="styles/comments.css" />
+</head>
+<body>
+  <header>
+    <span>
+      <h1 id="title">QandA</h1>
+      <button class="nav-btn" id="toggle-btn">
+        <span class="glyphicon glyphicon-triangle-bottom"></span>
+        Threads
+      </button>
+    </span>
+    <span class="navbar-nav container-fluid" id="nav-bar">
+      <button type="button" class="nav-btn" id="create-btn">
+        <span class="glyphicon glyphicon-edit"></span>
+        Create
+      </button>
+      <button type="button" class="nav-btn" data-toggle="modal" data-target="#profile-modal" id="profile-btn">
+        <span class="glyphicon glyphicon-user"></span>
+        Profile
+      </button>
+      <button type="button" class="nav-btn" id="logout-btn">
+        <span class="glyphicon glyphicon-log-out"></span>
+        Logout
+      </button>
+    </span>
+  </header>
+  <main role="main">
+    <div id="error-popup" class="error-popup">
+      <span id="error-message" class="error-message"></span>
+      <button id="close-error-btn">&times;</button>
+    </div>
+    <!-- Authentication Forms -->
+    <!-- Adapted from https://www.w3schools.com/bootstrap/bootstrap_tabs_pills.asp -->
+    <section class="container-fluid" id="auth">
+      <!-- Tabs to switch between Login/Register -->
+      <section class="container" id="auth-pills">
+        <ul class="nav nav-tabs">
+          <li class="active" id="login-pill"><a data-toggle="pill" href="#login-page">Login</a></li>
+          <li id="register-pill"><a data-toggle="pill" href="#register-page">Register</a></li>
+        </ul>
+      </section>
+      
+      <div class="tab-content" id="auth-forms">
+        <!-- Login form -->
+        <section class="tab-pane fade in active" id="login-page">
+          <h3>Login</h3>
+          <form id="login-form">
+            <label class="required-input" for="login-email">Email</label><br>
+            <input type="email" id="login-email" name="email" placeholder="jane@example.com" required><br><br>
+            <label class="required-input" for="login-password">Password</label><br>
+            <input type="password" id="login-password" name="password" placeholder="Password" required><br><br>
+            <input class="btn btn-primary" type="submit" value="Login" id="login-button"><br><br>
+          </form>
+        </section>
+        <!-- Register form -->
+        <section class="tab-pane fade" id="register-page">
+          <h3>Register</h3>
+          <form id="register-form">
+            <label class="required-input" for="register-name">Name</label><br>
+            <input type="text" id="register-name" name="email" placeholder="Jane" required><br><br>
+            <label class="required-input" for="register-email">Email</label><br>
+            <input type="email" id="register-email" name="email" placeholder="jane@example.com" required><br><br>
+            <label class="required-input" for="register-password">Password</label><br>
+            <input type="password" id="register-password" name="password" placeholder="Password" required><br><br>
+            <label class="required-input" for="confirm-password">Confirm Password</label><br>
+            <input type="password" id="confirm-password" name="password" placeholder="Password" required><br><br>
+            <input class="btn btn-primary" type="submit" value="Register" id="register-button">
+          </form>
+        </section>
+      </div>
+    </section>
+    
+    <!-- Dashboard -->
+    <section class="container" id="dashboard">
+      <!-- Use Grid style for thread list on the left and displayed thread on the right -->
+      <div class="row" id="thread-cols">
+        <div class="col-md-4" id="left-tab">
+          <div id="threads-container"></div>
+          <button class="btn btn-primary" id="load-more-btn">Load More</button>
+          <p id="no-threads">No More Threads To Load</p>
+        </div>
+        <div class="col-md-8 container" id="display-thread-container">
+          <section id="display-thread">
+            <p id="no-thread">No Thread Selected</p>
+          </section>
+          <span class="hide" id="lock-icon">
+              &#128274;
+          </span>
+          <span class="row" id="thread-interactions">
+            <button type="button" class="btn btn-primary thread-btn" data-toggle="modal" data-target="#edit-screen" id="edit-thread-btn">
+              <span class="glyphicon glyphicon-pencil"></span>
+              Edit
+            </button>
+            <span>
+              <button type="button" class="btn btn-primary thread-btn" id="like-btn">
+                <span class="glyphicon glyphicon-thumbs-up"></span>
+                Like
+              </button>
+              <button type="button" class="btn btn-primary thread-btn" id="unlike-btn">
+                <span class="glyphicon glyphicon-thumbs-down"></span>
+                Unlike
+              </button>
+            </span>
+            <span>
+              <button type="button" class="btn btn-primary thread-btn" id="watch-btn">
+                <span class="glyphicon glyphicon-eye-open"></span>
+                Watch
+              </button>
+              <button type="button" class="btn btn-primary thread-btn" id="unwatch-btn">
+                <span class="glyphicon glyphicon-eye-close"></span>
+                Unwatch
+              </button>
+            </span>
+            <button type="button" class="btn btn-danger thread-btn" id="delete-thread-btn">
+              <span class="glyphicon glyphicon-trash"></span>
+              Delete
+            </button>
+          </span>
+          <div class="comments section-title" id="comments-title">
+            <span class="glyphicon glyphicon-comment"></span>
+            Comments
+          </div>
+          <section id="comments-container"></section>
+          <section class="comments" id="comments-action">
+            <input type="text" class="form-control" id="new-comment" placeholder="... Add Comment">
+            <button class="btn btn-secondary" id="submit-comment">
+              Submit Comment
+              <span class="glyphicon glyphicon-send"></span>
+            </button>
+          </section>
+        </section>
+      </div>
+    </div>
+    <!-- Section to contain modal popup forms -->
+    <!-- All are adapted code from Bootstrap guide https://getbootstrap.com/docs/4.0/components/modal/ -->
+    <section id="modal-containers">
+      <!-- Viewing Profile -->
+      <div class="modal fade" tabindex="-1" role="dialog" id="profile-modal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title">View Profile</h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <button class="btn btn-primary" data-toggle="modal" data-target="#edit-profile-modal" id="edit-profile-btn">
+                <span class="glyphicon glyphicon-edit"></span>
+                Edit Profile
+              </button>
+              <span id="display-profile"></span>
+              <label class="form-label" for="user-role" id="user-role-label">User Role</label>
+              <select class="form-control" id="user-role">
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal" id="update-role-btn">Update</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Editing Profile -->
+      <div class="modal fade" tabindex="-1" role="dialog" id="edit-profile-modal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title">Edit Profile</h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label class="form-label" for="update-email">Email</label>
+                <input type="email" class="form-control" id="update-email"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="update-password">Password</label>
+                <input type="password" class="form-control" id="update-password"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="update-name">Name</label>
+                <input type="text" class="form-control" id="update-name"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="pfp-file">Upload a new profile picture</label>
+                <input accept="image/jpeg, image/png, image/jpg" type="file" class="form-control" id="pfp-file"/>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" id="profile-submit" data-dismiss="modal">Save Changes</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Replying to a comment -->
+      <div class="modal fade" tabindex="-1" role="dialog" id="reply-modal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title">Add Reply</h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="reply-x">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <span>Replying to...</span>
+              <i id="replying-to"></i>
+              <input type="text" class="form-control" id="reply-content" placeholder="...Reply">
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" data-dismiss="modal" id="reply-submit">Comment</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" id="reply-close">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Editing a Comment -->
+      <div class="modal fade" tabindex="-1" role="dialog" id="edit-cmt-modal">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title">Edit Comment</h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="edit-x">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <input type="text" class="form-control" id="edit-cmt">
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" data-dismiss="modal" id="edit-cmt-submit">Save Comment</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" id="edit-close">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Editing a thread -->
+      <section id="edit-thread">
+        <div class="modal fade" tabindex="-1" role="dialog" id="edit-screen">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title">Edit Thread</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-group">
+                    <label for="edit-title">Title</label>
+                    <input type="text" class="form-control" id="edit-title" placeholder="Thread Title">
+                  </div>
+                  <div class="form-group">
+                    <label for="edit-content">Content</label>
+                    <input type="text" class="form-control" id="edit-content" placeholder="Another input">
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="edit-public">
+                    <label class="form-check-label" for="edit-public">Public Thread</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="edit-lock">
+                    <label class="form-check-label" for="edit-lock">Lock Thread &#128274;</label>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" data-dismiss="modal" id="edit-thread-submit">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+    <!-- Separate screen for creating a new thread -->
+    <section class="container" id="create-thread">
+      <h2>Create Thread</h2>
+      <form>
+        <div class="form-group">
+          <label for="form-title">Title</label>
+          <input type="text" class="form-control" id="form-title" placeholder="Thread Title">
+        </div>
+        <div class="form-group">
+          <label for="form-content">Content</label>
+          <input type="text" class="form-control" id="form-content" placeholder="Another input">
+        </div>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="form-public">
+          <label class="form-check-label" for="form-public">Public Thread?</label>
+        </div>
+        <button type="submit" class="btn btn-primary" id="create-submit">Submit</button>
+        <button type="button" class="btn btn-secondary" id="exit-create-thread">Close</button>
+      </form>
+    </section>
+  </section>
+</main>
+<script type="module" src="src/main.js"></script>
+</script>
+</body>
+</html>

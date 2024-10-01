@@ -1,0 +1,18 @@
+.reply-container {
+  margin-left: 5vw;
+  border-left: 1px solid darkgray;
+  padding-left: 5px;
+}
+
+.reply-two {
+  margin-left: 10vw;
+}
+
+.comments {
+  display: none;
+  padding: 1%;
+}
+
+.pfp {
+  height: 5vh;
+}

@@ -1,0 +1,80 @@
+.thread-box {
+  border: 1px solid black;
+  margin: 2%;
+  padding: 2%;
+  margin-bottom: 10px;
+  max-height: 100px;
+  height: 100px;
+  overflow: hidden;
+}
+
+.thread-btn {
+  cursor: pointer;
+  size: 10em;
+  display: none;
+}
+
+.thread-box:hover {
+  cursor: pointer;
+}
+
+.profile-threads {
+  max-height: fit-content;
+  height: fit-content;
+}
+
+.thread-title {
+  font-weight: bold;
+  border-bottom: 1px solid darkgray;
+}
+
+.thread-details {
+  font-style: italic;
+}
+
+.user-link {
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+}
+
+#dashboard {
+  padding: 0;
+  margin-left: 1vw;
+}
+
+#threads-container {
+  position: relative;
+  justify-self: left;
+  margin: 0;
+  padding: 0;
+  max-width: 400px;
+  overflow-y: scroll;
+  border: 1px solid black;
+}
+
+#no-threads {
+  display: none;
+}
+
+#thread-interactions {
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+}
+
+#create-thread {
+  display: none;
+  justify-content: center;
+}
+
+/* For screens narrower than 400px */
+@media (max-width: 700px) {
+  .nav-btn {
+    font-size: small;
+  }
+  
+  .compact-view {
+    max-width: 10vw;
+  }
+}

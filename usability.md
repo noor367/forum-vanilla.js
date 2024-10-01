@@ -1,0 +1,8 @@
+- No red/green or blue/yellow constrasting (the most common forms of colourblindess)
+- Light text on dark background and dark text on light backgrounds to provide easy readability for users and improve the user experience
+- Sans serif font to improve accessibility for users with dyslexia and other reading difficulties that can occur from complicated fonts as well as improve user experience with a cleaner modern look matching common and popular websites
+- Familiar and commonly used icons that are ubiquitous with their functions (trash can for delete, thumbs up for like)
+- Alt text provided in all img elements
+- Use (or attempted use) or Bootstrap Grids to improve usability with aligned items
+- For smaller screens: reduced the size of buttons to fit the header. The threads list takes up the whole screen but since I have used the 'Load More' button, users can just scroll down to see the individual thread screen
+- All modals have a 'Close' button rather than just an 'x' symbol somewhere, which can be difficult to press on smaller screens
